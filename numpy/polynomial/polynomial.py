@@ -401,20 +401,20 @@ def polydiv(c1, c2):
     # c1, c2 are trimmed copies
     [c1, c2] = pu.as_series([c1, c2])
     if c2[-1] == 0:                          # Branch: 'branch1'   
-        branches_covered['Polydiv']['branch1'] = True
+        branches_covered['polydiv']['branch1'] = True
         raise ZeroDivisionError()
 
     # note: this is more efficient than `pu._div(polymul, c1, c2)`
     lc1 = len(c1)
     lc2 = len(c2)
     if lc1 < lc2:                            # Branch: 'branch2'
-        branches_covered['Polydiv']['branch2'] = True
+        branches_covered['polydiv']['branch2'] = True
         return c1[:1]*0, c1 # TEST CASE: test where lc1 < lc2: Assert: that c1[:1]*0, c1 is returned.
     elif lc2 == 1:                           # Branch: 'branch3'
-        branches_covered['Polydiv']['branch3'] = True
+        branches_covered['polydiv']['branch3'] = True
         return c1/c2[-1], c1[:1]*0
     else:                                    # Branch: 'branch4'   
-        branches_covered['Polydiv']['branch4'] = True
+        branches_covered['polydiv']['branch4'] = True
         dlen = lc1 - lc2
         scl = c2[-1]
         c2 = c2[:-1]/scl
@@ -520,28 +520,28 @@ def polyder(c, m=1, scl=1, axis=0):
     """
     c = np.array(c, ndmin=1, copy=True)
     if c.dtype.char in '?bBhHiIlLqQpP':         # Branch: 'branch1'
-        branches_covered['Polyder']['branch1'] = True
+        branches_covered['polyder']['branch1'] = True
         # astype fails with NA               
         c = c + 0.0
     cdt = c.dtype
     cnt = pu._deprecate_as_int(m, "the order of derivation")
     iaxis = pu._deprecate_as_int(axis, "the axis")
     if cnt < 0:                                      # Branch: 'branch2'
-        branches_covered['Polyder']['branch2'] = True
+        branches_covered['polyder']['branch2'] = True
         raise ValueError("The order of derivation must be non-negative") 
     iaxis = normalize_axis_index(iaxis, c.ndim)
 
     if cnt == 0:                               # Branch: 'branch3'
-        branches_covered['Polyder']['branch3'] = True
+        branches_covered['polyder']['branch3'] = True
         return c                             
 
     c = np.moveaxis(c, iaxis, 0)
     n = len(c)
     if cnt >= n:                                # Branch: 'branch4'
-        branches_covered['Polyder']['branch4'] = True
+        branches_covered['polyder']['branch4'] = True
         c = c[:1]*0 #TEST CASE: test where cnt => n, assert that c = c[:1]*0 is returned.
     else:                                      # Branch: branch5     
-        branches_covered['Polyder']['branch5'] = True
+        branches_covered['polyder']['branch5'] = True
         for i in range(cnt):
             n = n - 1
             c *= scl
@@ -633,31 +633,31 @@ def polyint(c, m=1, k=[], lbnd=0, scl=1, axis=0):
     """
     c = np.array(c, ndmin=1, copy=True)
     if c.dtype.char in '?bBhHiIlLqQpP':                # Branch: 'branch1'
-        branches_covered['Polyint']['branch1'] = True
+        branches_covered['polyint']['branch1'] = True
         # astype doesn't preserve mask attribute.
         c = c + 0.0
     cdt = c.dtype
     if not np.iterable(k):                             # Branch: 'branch2' 
-        branches_covered['Polyint']['branch2'] = True
+        branches_covered['polyint']['branch2'] = True
         k = [k]
     cnt = pu._deprecate_as_int(m, "the order of integration")
     iaxis = pu._deprecate_as_int(axis, "the axis")
     if cnt < 0:                                        # Branch: 'branch3'
-        branches_covered['Polyint']['branch3'] = True
+        branches_covered['polyint']['branch3'] = True
         raise ValueError("The order of integration must be non-negative")
     if len(k) > cnt:                                   # Branch: 'branch4' 
-        branches_covered['Polyint']['branch4'] = True
+        branches_covered['polyint']['branch4'] = True
         raise ValueError("Too many integration constants")
     if np.ndim(lbnd) != 0:                             # Branch: 'branch5'  
-        branches_covered['Polyint']['branch5'] = True
+        branches_covered['polyint']['branch5'] = True
         raise ValueError("lbnd must be a scalar.")
     if np.ndim(scl) != 0:                               # Branch: 'branch6'  
-        branches_covered['Polyint']['branch6'] = True
+        branches_covered['polyint']['branch6'] = True
         raise ValueError("scl must be a scalar.")
     iaxis = normalize_axis_index(iaxis, c.ndim)
 
     if cnt == 0:                                         # Branch: 'branch7'  
-        branches_covered['Polyint']['branch8'] = True
+        branches_covered['polyint']['branch8'] = True
         return c
 
     k = list(k) + [0]*(cnt - len(k))
@@ -666,10 +666,10 @@ def polyint(c, m=1, k=[], lbnd=0, scl=1, axis=0):
         n = len(c)
         c *= scl
         if n == 1 and np.all(c[0] == 0):                   # Branch: 'branch8'                  
-            branches_covered['Polyint']['branch8'] = True
+            branches_covered['polyint']['branch8'] = True
             c[0] += k[i]
         else:                                              # Branch: 'branch9'   
-            branches_covered['Polyint']['branch9'] = True
+            branches_covered['polyint']['branch9'] = True
             tmp = np.empty((n + 1,) + c.shape[1:], dtype=cdt)
             tmp[0] = c[0]*0
             tmp[1] = c[0]

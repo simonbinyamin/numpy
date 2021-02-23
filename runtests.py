@@ -371,6 +371,14 @@ def main(argv):
     with open('coverage_results.json', 'w') as json_file:
         json.dump(branches_covered, json_file)
 
+    # Print output to console
+    print(f'Command: {tests[0]}')
+    print('//'*10)
+    for func_name in branches_covered.keys():
+        for branch_name, branch_taken in branches_covered[func_name].items():
+            if not branch_taken:
+                print(f'{branch_name} not taken in function {func_name}')
+
     if isinstance(result, bool):
         sys.exit(0 if result else 1)
     elif result.wasSuccessful():

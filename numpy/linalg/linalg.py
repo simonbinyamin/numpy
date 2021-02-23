@@ -31,6 +31,7 @@ from numpy.core.overrides import set_module
 from numpy.core import overrides
 from numpy.lib.twodim_base import triu, eye
 from numpy.linalg import lapack_lite, _umath_linalg
+from tools.branches_covered import branches_covered
 
 
 array_function_dispatch = functools.partial(
@@ -620,47 +621,47 @@ def matrix_power(a, n):
     _assert_stacked_square(a)
 
     try:                            # Branch: 'branch1'
-        branches_covered['Matrix_power']['branch1'] = True
+        branches_covered['matrix_power']['branch1'] = True
         n = operator.index(n)
     except TypeError as e:          # Branch: 'branch2'
-        branches_covered['Matrix_power']['branch2'] = True
+        branches_covered['matrix_power']['branch2'] = True
         raise TypeError("exponent must be an integer") from e
 
     # Fall back on dot for object arrays. Object arrays are not supported by
     # the current implementation of matmul using einsum
     if a.dtype != object:           # Branch: 'branch3'
-        branches_covered['Matrix_power']['branch3'] = True
+        branches_covered['matrix_power']['branch3'] = True
         fmatmul = matmul
     elif a.ndim == 2:               # Branch: 'branch4'
-        branches_covered['Matrix_power']['branch4'] = True
+        branches_covered['matrix_power']['branch4'] = True
         fmatmul = dot
     else:                           # Branch: 'branch5'
-        branches_covered['Matrix_power']['branch5'] = True
+        branches_covered['matrix_power']['branch5'] = True
         raise NotImplementedError(
             "matrix_power not supported for stacks of object arrays")
 
     if n == 0:                      # Branch: 'branch6'
-        branches_covered['Matrix_power']['branch6'] = True
+        branches_covered['matrix_power']['branch6'] = True
         a = empty_like(a)
         a[...] = eye(a.shape[-2], dtype=a.dtype)
         return a
 
     elif n < 0:                     # Branch: 'branch7'
-        branches_covered['Matrix_power']['branch7'] = True
+        branches_covered['matrix_power']['branch7'] = True
         a = inv(a)
         n = abs(n)
 
     # short-cuts.
     if n == 1:                      # Branch: 'branch8'
-        branches_covered['Matrix_power']['branch8'] = True
+        branches_covered['matrix_power']['branch8'] = True
         return a
 
     elif n == 2:                    # Branch: 'branch9'
-        branches_covered['Matrix_power']['branch9'] = True
+        branches_covered['matrix_power']['branch9'] = True
         return fmatmul(a, a)
 
     elif n == 3:                    # Branch: 'branch10'
-        branches_covered['Matrix_power']['branch10'] = True
+        branches_covered['matrix_power']['branch10'] = True
         return fmatmul(fmatmul(a, a), a)
 
     # Use binary decomposition to reduce the number of matrix multiplications.
@@ -671,7 +672,7 @@ def matrix_power(a, n):
         z = a if z is None else fmatmul(z, z)
         n, bit = divmod(n, 2)
         if bit:                     # Branch: 'branch11'
-            branches_covered['Matrix_power']['branch11'] = True
+            branches_covered['matrix_power']['branch11'] = True
             result = z if result is None else fmatmul(result, z)
 
     return result
@@ -2717,9 +2718,11 @@ def multi_dot(arrays, *, out=None):
     """
     n = len(arrays)
     # optimization only makes sense for len(arrays) > 2
-    if n < 2:
+    if n < 2:                                                   # Branch: 'branch1'
+        branches_covered['multi_dot']['branch1'] = True
         raise ValueError("Expecting at least two arrays.")
-    elif n == 2:
+    elif n == 2:                                                # Branch: 'branch2'
+        branches_covered['multi_dot']['branch2'] = True
         return dot(arrays[0], arrays[1], out=out)
 
     arrays = [asanyarray(a) for a in arrays]
@@ -2728,25 +2731,32 @@ def multi_dot(arrays, *, out=None):
     ndim_first, ndim_last = arrays[0].ndim, arrays[-1].ndim
     # Explicitly convert vectors to 2D arrays to keep the logic of the internal
     # _multi_dot_* functions as simple as possible.
-    if arrays[0].ndim == 1:
+    if arrays[0].ndim == 1:                                    # Branch: 'branch3' 
+        branches_covered['multi_dot']['branch3'] = True
         arrays[0] = atleast_2d(arrays[0])
-    if arrays[-1].ndim == 1:
+    if arrays[-1].ndim == 1:                                   # Branch: 'branch4' 
+        branches_covered['multi_dot']['branch4'] = True
         arrays[-1] = atleast_2d(arrays[-1]).T
     _assert_2d(*arrays)
 
     # _multi_dot_three is much faster than _multi_dot_matrix_chain_order
-    if n == 3:
+    if n == 3:                                                 # Branch: 'branch5' 
+        branches_covered['multi_dot']['branch5'] = True
         result = _multi_dot_three(arrays[0], arrays[1], arrays[2], out=out)
-    else:
+    else:                                                      # Branch: 'branch6' 
+        branches_covered['multi_dot']['branch6'] = True
         order = _multi_dot_matrix_chain_order(arrays)
         result = _multi_dot(arrays, order, 0, n - 1, out=out)
 
     # return proper shape
-    if ndim_first == 1 and ndim_last == 1:
-        return result[0, 0]  # scalar
-    elif ndim_first == 1 or ndim_last == 1:
+    if ndim_first == 1 and ndim_last == 1:                     # Branch: 'branch7'
+        branches_covered['multi_dot']['branch7'] = True
+        return result[0, 0]  # scalar   
+    elif ndim_first == 1 or ndim_last == 1:                    # Branch: 'branch8' 
+        branches_covered['multi_dot']['branch8'] = True
         return result.ravel()  # 1-D
-    else:
+    else:                                                      # Branch: 'branch9' 
+        branches_covered['multi_dot']['branch9'] = True
         return result
 
 

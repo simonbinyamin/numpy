@@ -5,46 +5,20 @@ import json
 # Branches covered dictionary
 branches_covered = dict()
 
-# Polydiv
-branches_covered['Polydiv'] = {
-                    'branch1': False, 
-                    'branch2': False,
-                    'branch3': False,
-                    'branch4': False,
+# Functions -> Number of branches
+func_branches = {
+        'polydiv': 4,
+        'polyder': 5,
+        'polyint': 9,
+        'matrix_power': 11,
+        'multi_dot': 9
 }
 
-# Polyder 
-branches_covered['Polyder'] = {
-                    'branch1': False, 
-                    'branch2': False,
-                    'branch3': False,
-                    'branch4': False,
-                    'branch5': False,
-}
+# intialy set flags to 'False'
+for func, nr_branches in func_branches.items():
+    branches_covered[func] = dict()
+    for i in range(nr_branches):
+        branches_covered[func][f'branch{i+1}'] = False
+ 
+    
 
-#Polyint
-branches_covered['Polyint'] = {
-                    'branch1': False, 
-                    'branch2': False,
-                    'branch3': False,
-                    'branch4': False,
-                    'branch5': False,
-                    'branch6': False, 
-                    'branch7': False,
-                    'branch8': False,
-                    'branch9': False,
-}
-#Matrix_power
-branches_covered['Matrix_power'] = {
-                    'branch1': False, 
-                    'branch2': False,
-                    'branch3': False,
-                    'branch4': False,
-                    'branch5': False,
-                    'branch6': False, 
-                    'branch7': False,
-                    'branch8': False,
-                    'branch9': False,
-                    'branch10': False,
-                    'branch11': False,
-}
