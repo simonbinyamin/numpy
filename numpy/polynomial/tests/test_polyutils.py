@@ -11,29 +11,23 @@ from numpy.testing import (
 class TestMisc:
 
 
-    def test_trimseqZero(self)
-	    assertTrue(polyutils.trimseq(()), ())
+    def test_trimseqZero(self):
+	    assert_equal(pu.trimseq(()), ())
 
     def test_vander_nd_wrongNrOfPoints(self):
-        assert_raises(polyutils._vander_nd((), (1,2,3), [90]), ValueError)
+        assert_raises(ValueError,pu._vander_nd,(), (1,2,3), [90])
 
     def test_vander_nd_wrongDegree(self):
-        assert_raises(polyutils._vander_nd((), (1,2,3), [90.65]), ValueError)
+        assert_raises(ValueError,pu._vander_nd,(), (1,2,3), [90.65])
 
     def test_vander_nd_ZeroPoints(self):
-        assert_raises(polyutils._vander_nd(("s"), (), [90.65]), ValueError)
-
-    def test_valnd_errorArgs(self):
-        z = np.ones((2, 3))
-        assert_raises(polyutils._valnd((), (), z), ValueError)
+        assert_raises(ValueError,pu._vander_nd,("s") ,(), [90.65])
 
     def test_div_zeroDiv(self):
-        assert_raises(polyutils._div(("s"), (), [0]), ZeroDivisionError)
+        assert_raises(ZeroDivisionError, pu._div,("s"), (1,2,3),[0])
 
     def test_pow_toLargePow(self):
-        assert_raises(polyutils._pow((),[1,2,3] , 5, 4), ValueError)
-
-
+        assert_raises(ValueError, pu._pow,(),[1,2,3] , 5, 4)
 
     def test_trimseq(self):
         for i in range(5):

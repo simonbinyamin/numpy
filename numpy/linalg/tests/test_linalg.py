@@ -1508,8 +1508,7 @@ class TestNorm_NonSystematic:
 
     def test_normWrongDataType(self):
         x = np.arange(3, dtype=np.longdouble)
-        assert_raises(norm(x, ord=3,'text'), ValueError)
-
+        assert_raises(TypeError,norm,x, ord=3,axis="test")
 
 
     def test_longdouble_norm(self):

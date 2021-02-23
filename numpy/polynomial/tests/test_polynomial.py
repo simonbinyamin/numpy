@@ -591,3 +591,11 @@ class TestMisc:
 
     def test_polyline(self):
         assert_equal(poly.polyline(3, 4), [3, 4])
+
+    def test_polylineZero(self):
+        assert_equal(poly.polyline(3,0), [3])
+
+    def test_polyvanderNegDeg(self):
+	    x = np.arange(3)
+	    assert_raises(ValueError,poly.polyvander,x,-1)
+

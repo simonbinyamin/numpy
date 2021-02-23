@@ -291,12 +291,12 @@ def polymulx(c):
     Multiply the polynomial `c` by x, where x is the independent
     variable.
 
-
     Parameters
     ----------
     c : array_like
         1-D array of polynomial coefficients ordered from low to
         high.
+
 
     Returns
     -------
@@ -743,6 +743,7 @@ def polyval(x, c, tensor=True):
 
     """
     c = np.array(c, ndmin=1, copy=False)
+
     if c.dtype.char in '?bBhHiIlLqQpP':
         # astype fails with NA
         c = c + 0.0

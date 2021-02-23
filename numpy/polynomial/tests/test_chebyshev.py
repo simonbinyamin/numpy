@@ -45,25 +45,25 @@ class TestPrivate:
             assert_equal(res, tgt)
 
     def test_zseries_div_lenOne(self):
-        //ch2 = _zseries_div(z1,z2);
-        //assertEqual(chebyshev._zseries_div(z1,z2), ch2)
+        assert_equal(cheb._zseries_div(),)
 
+    """"
     def test_zseries_div_lc1LessThanlc2(self):
-        //assertTrue(chebyshev._zseries_div(null, null), ())
+        """"//assertTrue(chebyshev._zseries_div(null, null), ())"""
 
     def test_chebline_Zero(self):
-        assertTrue(chebyshev.chebline(3, 0), [3])
+        assert_equal(cheb.chebline(3, 0), [3])
 
     def test_chebdiv_ZeroDiv(self):
         c1 = (1,2,3)
-        c2 = (0,1,2)
-        assert_raises(chebdiv.chebdiv(c1, c2), ZeroDivisionError)
+        c2 = (0,0,0)
+        assert_raises(ZeroDivisionError,cheb.chebdiv,c1, c2)
 
     def test_chebvander_NegDeg(self):
-        assert_raises(chebdiv.chebvander((), -1), ValueError)
+        assert_raises(ValueError,cheb.chebvander,(), -1)
 
     def test_chebgauss_negdeg(self):
-        assert_raises(chebdiv.chebgauss(-1), ValueError)
+        assert_raises(ValueError,cheb.chebgauss,-1)
 
 
 class TestConstants:
