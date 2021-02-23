@@ -369,7 +369,7 @@ def main(argv):
 
     # Write coverage results to Json
     with open('coverage_results.json', 'w') as json_file:
-        json.dump(branches_covered, json_file)
+        json.dump(branches_covered, json_file, indent=4, sort_keys=True)
 
     # Print output to console
     print(f'Command: {tests[0]}')
