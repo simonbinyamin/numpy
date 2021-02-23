@@ -43,6 +43,17 @@ class TestConstants:
         assert_equal(leg.legx, [0, 1])
 
 
+    def test_legline_ZeroScl(self):
+        assertEqual(legendre.legline(3,0), [3])
+
+    def test_legder_orderHigherThanCoeff(self):
+        //assertTrue(legendre.legder(null,null,null,null), ())
+
+    def test_legint_ZeroIntOrd(self):
+        //assertTrue(legendre.legint(), ())
+    def test_legvander_NegDeg(self):
+        assert_raises(legendre.legvander((1,2,3), -1), ValueError)
+
 class TestArithmetic:
     x = np.linspace(-1, 1, 100)
 

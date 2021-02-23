@@ -1506,6 +1506,12 @@ class _TestNorm(_TestNorm2D, _TestNormGeneral):
 
 class TestNorm_NonSystematic:
 
+    def test_normWrongDataType(self):
+        x = np.arange(3, dtype=np.longdouble)
+        assert_raises(norm(x, ord=3,'text'), ValueError)
+
+
+
     def test_longdouble_norm(self):
         # Non-regression test: p-norm of longdouble would previously raise
         # UnboundLocalError.

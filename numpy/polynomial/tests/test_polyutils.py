@@ -10,6 +10,31 @@ from numpy.testing import (
 
 class TestMisc:
 
+
+    def test_trimseqZero(self)
+	    assertTrue(polyutils.trimseq(()), ())
+
+    def test_vander_nd_wrongNrOfPoints(self):
+        assert_raises(polyutils._vander_nd((), (1,2,3), [90]), ValueError)
+
+    def test_vander_nd_wrongDegree(self):
+        assert_raises(polyutils._vander_nd((), (1,2,3), [90.65]), ValueError)
+
+    def test_vander_nd_ZeroPoints(self):
+        assert_raises(polyutils._vander_nd(("s"), (), [90.65]), ValueError)
+
+    def test_valnd_errorArgs(self):
+        z = np.ones((2, 3))
+        assert_raises(polyutils._valnd((), (), z), ValueError)
+
+    def test_div_zeroDiv(self):
+        assert_raises(polyutils._div(("s"), (), [0]), ZeroDivisionError)
+
+    def test_pow_toLargePow(self):
+        assert_raises(polyutils._pow((),[1,2,3] , 5, 4), ValueError)
+
+
+
     def test_trimseq(self):
         for i in range(5):
             tgt = [1]

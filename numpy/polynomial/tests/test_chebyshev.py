@@ -44,6 +44,27 @@ class TestPrivate:
             res = cheb._zseries_to_cseries(inp)
             assert_equal(res, tgt)
 
+    def test_zseries_div_lenOne(self):
+        //ch2 = _zseries_div(z1,z2);
+        //assertEqual(chebyshev._zseries_div(z1,z2), ch2)
+
+    def test_zseries_div_lc1LessThanlc2(self):
+        //assertTrue(chebyshev._zseries_div(null, null), ())
+
+    def test_chebline_Zero(self):
+        assertTrue(chebyshev.chebline(3, 0), [3])
+
+    def test_chebdiv_ZeroDiv(self):
+        c1 = (1,2,3)
+        c2 = (0,1,2)
+        assert_raises(chebdiv.chebdiv(c1, c2), ZeroDivisionError)
+
+    def test_chebvander_NegDeg(self):
+        assert_raises(chebdiv.chebvander((), -1), ValueError)
+
+    def test_chebgauss_negdeg(self):
+        assert_raises(chebdiv.chebgauss(-1), ValueError)
+
 
 class TestConstants:
 
