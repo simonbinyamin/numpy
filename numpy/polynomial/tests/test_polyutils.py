@@ -18,10 +18,10 @@ class TestMisc:
         assert_raises(ValueError,pu._vander_nd,(), (1,2,3), [90])
 
     def test_vander_nd_wrongDegree(self):
-        assert_raises(ValueError,pu._vander_nd,(), (1,2,3), [90.65])
+        assert_raises(ValueError,pu._vander_nd,(), (), [90.65])
 
     def test_vander_nd_ZeroPoints(self):
-        assert_raises(ValueError,pu._vander_nd,("s") ,(), [90.65])
+        assert_raises(ValueError,pu._vander_nd,() ,(), [])
 
     def test_div_zeroDiv(self):
         assert_raises(ZeroDivisionError, pu._div,("s"), (1,2,3),[0])

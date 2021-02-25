@@ -589,9 +589,6 @@ class TestMisc:
         assert_equal(poly.polytrim(coef, 1), coef[:-3])
         assert_equal(poly.polytrim(coef, 2), [0])
 
-    def test_polyline(self):
-        assert_equal(poly.polyline(3, 4), [3, 4])
-
     def test_polylineZero(self):
         assert_equal(poly.polyline(3,0), [3])
 

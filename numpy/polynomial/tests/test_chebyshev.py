@@ -44,13 +44,6 @@ class TestPrivate:
             res = cheb._zseries_to_cseries(inp)
             assert_equal(res, tgt)
 
-    def test_zseries_div_lenOne(self):
-        assert_equal(cheb._zseries_div(),)
-
-    """"
-    def test_zseries_div_lc1LessThanlc2(self):
-        """"//assertTrue(chebyshev._zseries_div(null, null), ())"""
-
     def test_chebline_Zero(self):
         assert_equal(cheb.chebline(3, 0), [3])
 
