@@ -5653,8 +5653,7 @@ class MaskedArray(ndarray):
 
         self[...] = np.take_along_axis(self, sidx, axis=axis)
 
-    @staticmethod
-    def minMaxNoExplicit(result, newmask):
+    def __minMaxNoExplicit(self, result, newmask):
         if result.ndim:
             # Set the mask
             result.__setmask__(newmask)
@@ -5665,8 +5664,7 @@ class MaskedArray(ndarray):
             result = masked
         return result
 
-    @staticmethod
-    def minMaxExplicit(out, newmask):
+    def __minMaxExplicit(self, out, newmask):
         if isinstance(out, MaskedArray):
             outmask = getmask(out)
             if outmask is nomask:
@@ -5722,10 +5720,10 @@ class MaskedArray(ndarray):
         if out is None:
             result = self.filled(fill_value).min(
                 axis=axis, out=out, **kwargs).view(type(self))
-            return MaskedArray.minMaxNoExplicit(result, newmask)
+            return self.__minMaxNoExplicit(result, newmask)
         # Explicit output
         result = self.filled(fill_value).min(axis=axis, out=out, **kwargs)
-        return MaskedArray.minMaxExplicit(out, newmask)
+        return self.__minMaxExplicit(out, newmask)
 
     # unique to masked arrays
     def mini(self, axis=None):
@@ -5837,10 +5835,10 @@ class MaskedArray(ndarray):
         if out is None:
             result = self.filled(fill_value).max(
                 axis=axis, out=out, **kwargs).view(type(self))
-            return MaskedArray.minMaxNoExplicit(result, newmask)
+            return self.__minMaxNoExplicit(result, newmask)
         # Explicit output
         result = self.filled(fill_value).max(axis=axis, out=out, **kwargs)
-        return MaskedArray.minMaxExplicit(out, newmask)
+        return self.__minMaxExplicit(out, newmask)
 
     def ptp(self, axis=None, out=None, fill_value=None, keepdims=False):
         """
