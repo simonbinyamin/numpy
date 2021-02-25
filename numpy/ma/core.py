@@ -5653,6 +5653,33 @@ class MaskedArray(ndarray):
 
         self[...] = np.take_along_axis(self, sidx, axis=axis)
 
+    @staticmethod
+    def minMaxNoExplicit(result, newmask):
+        if result.ndim:
+            # Set the mask
+            result.__setmask__(newmask)
+            # Get rid of Infs
+            if newmask.ndim:
+                np.copyto(result, result.fill_value, where=newmask)
+        elif newmask:
+            result = masked
+        return result
+
+    @staticmethod
+    def minMaxExplicit(out, newmask):
+        if isinstance(out, MaskedArray):
+            outmask = getmask(out)
+            if outmask is nomask:
+                outmask = out._mask = make_mask_none(out.shape)
+            outmask.flat = newmask
+        else:
+            if out.dtype.kind in 'biu':
+                errmsg = "Masked data information would be lost in one or more"\
+                         " location."
+                raise MaskError(errmsg)
+            np.copyto(out, np.nan, where=newmask)
+        return out
+
     def min(self, axis=None, out=None, fill_value=None, keepdims=np._NoValue):
         """
         Return the minimum along a given axis.
@@ -5695,29 +5722,10 @@ class MaskedArray(ndarray):
         if out is None:
             result = self.filled(fill_value).min(
                 axis=axis, out=out, **kwargs).view(type(self))
-            if result.ndim:
-                # Set the mask
-                result.__setmask__(newmask)
-                # Get rid of Infs
-                if newmask.ndim:
-                    np.copyto(result, result.fill_value, where=newmask)
-            elif newmask:
-                result = masked
-            return result
+            return MaskedArray.minMaxNoExplicit(result, newmask)
         # Explicit output
         result = self.filled(fill_value).min(axis=axis, out=out, **kwargs)
-        if isinstance(out, MaskedArray):
-            outmask = getmask(out)
-            if outmask is nomask:
-                outmask = out._mask = make_mask_none(out.shape)
-            outmask.flat = newmask
-        else:
-            if out.dtype.kind in 'biu':
-                errmsg = "Masked data information would be lost in one or more"\
-                         " location."
-                raise MaskError(errmsg)
-            np.copyto(out, np.nan, where=newmask)
-        return out
+        return MaskedArray.minMaxExplicit(out, newmask)
 
     # unique to masked arrays
     def mini(self, axis=None):
@@ -5829,30 +5837,10 @@ class MaskedArray(ndarray):
         if out is None:
             result = self.filled(fill_value).max(
                 axis=axis, out=out, **kwargs).view(type(self))
-            if result.ndim:
-                # Set the mask
-                result.__setmask__(newmask)
-                # Get rid of Infs
-                if newmask.ndim:
-                    np.copyto(result, result.fill_value, where=newmask)
-            elif newmask:
-                result = masked
-            return result
+            return MaskedArray.minMaxNoExplicit(result, newmask)
         # Explicit output
         result = self.filled(fill_value).max(axis=axis, out=out, **kwargs)
-        if isinstance(out, MaskedArray):
-            outmask = getmask(out)
-            if outmask is nomask:
-                outmask = out._mask = make_mask_none(out.shape)
-            outmask.flat = newmask
-        else:
-
-            if out.dtype.kind in 'biu':
-                errmsg = "Masked data information would be lost in one or more"\
-                         " location."
-                raise MaskError(errmsg)
-            np.copyto(out, np.nan, where=newmask)
-        return out
+        return MaskedArray.minMaxExplicit(out, newmask)
 
     def ptp(self, axis=None, out=None, fill_value=None, keepdims=False):
         """
